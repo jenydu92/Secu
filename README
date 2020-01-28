@@ -1,0 +1,147 @@
+
+Projet de sécurité informatique de:
+-Ariane Stephan
+-Jennifer Tinoco
+-Wilfried Njangui
+
+***************lancement*************
+
+Pour lancer Chiffre
+Soit
+java Chiffre type cle texte
+Soit:
+java -jar sChiffre.jar type cle texte
+
+
+Pour lancer Dechiffre
+Soit
+java Dechiffre type cle texte
+Soit:
+java -jar sDechiffre.jar type cle texte
+
+
+Pour lancer Decrypt
+Soit
+java Decrypt type texte strategie
+si type = c et strategie = 1
+java Decrypt type texte 1 motConnu
+si type = v
+java -jar sDecrypt.jar v texte tailleMotCle
+
+
+Soit
+java -jar sDecrypt.jar type texte strategie
+si type = c et strategie = 1
+java -jar sDecrypt.jar c texte 1 motConnu
+si type = v
+java -jar sDecrypt.jar v texte tailleMotCle
+
+
+***********************Cesar******************
+
+La cle est un nombre entre 1 et 9
+
+-Pour le chiffrage, on verifie si le caractere lu est bien dans l'alphabet.
+Si c'est le cas on lui rajoute la distance de la clé, et on le rajoute dans notre texte chiffré.
+Si ce n'est pas le cas, c'est donc un espace, un point ou autre, et on l'ajoute dans notre texte chiffré.
+
+-Pour le dechiffrage, on verifie de la meme maniere si le caractere lu est bien dans l'alphabet.
+Si c'est le cas on lui retire la distance de la clé, et on le rajoute dans notre texte dechiffré.
+Si ce n'est pas le cas, c'est donc un espace, un point ou autre, et on l'ajoute dans notre texte dechiffré.
+
+-Pour le decryptage:
+***Strategie 1: mot connu
+On recupere les mots du texte, puis on compare pour chaque mot sa taille avec la taille du mot cle. Si elles sont egales,
+on parcourt le mot, et on regarde le decalage entre la ieme lettre du mot connu et la ieme lettre du mot. Dès que le decalage n'est pas le meme, on passe au mot suivant.
+Mais si on arrive à la fin du mot en ayant eu le meme decalage à chaque fois, on renvoie ce decalage.
+***Strategie 2: frequence
+On parcourt notre texte, et pour chaque caractere de l'alphabet, on incremente son compteur à sa position dans le tableau.
+On recupere ensuite la lettre qui est apparu le plus de fois, et on regarde son decalage avec la lettre e. On dechiffre notre texte avec ce decalage,
+on verifie si on a au moins la moitié des mots dans le dictionnaire. Si oui on a trouvé le decalage, sinon on regarde le decalage entre la lettreMax et la lettre suivante dans le tableau des lettres les plus frequentes.
+***Strategie 3: force brute
+On fait une boucle fort qui demarre de i=1 et va s'incrementer de 1 jusqu'à 26. On dechiffre notre texte avec un decalage de i. Si plus de la moitié des mots sont dans le dictionnaire,
+on a trouvé notre decalage, sinon on passe au i suivant.
+
+Une fois le decalage trouvé on fait un setDistance sur notre objet et on dechiffre.
+
+La methode verif regarde pour chaque mot s'il est dans le dictionnaire. Si oui elle incremente le nombre de mot correct. On fait ensuite une moyenne et si elle est egale ou superieur à 0,5 on renvoie true.
+
+
+
+
+**********************Vigenere*******************
+
+La cle est un mot
+
+-Pour le chiffrage, on initialise une distance qui correspond à la premiere lettre du mot cle, on parcourt notre texte, et pour chaque caractere dans l'alphabet, on lui ajoute la distance, puis on l'ajoute dans le texte chiffre,
+ puis la distance passe à la lettre suivante dans le mot cle, et on passe au caractere suivant dans le texte.
+ Si le caractere n'est pas dans l'alphabet on l'ajoute directement dans le texte chiffré.
+-Pour le dechiffrage, on procede de la meme maniere, mais on retire la distance pour chaque caractere (présent dans l'alphabet).
+
+-Pour le decryptage, on créé un tableau de la taille du mot cle (sans connaitre le mot cle), on parcourt ce tableau (vide) avec un compteur (qui demarre de 0, premiere case du tableau jusqu'à la derniere case),
+et pour chaque case, on lit tout les "n" caracteres, où n correspond à la taille du mot cle. On rajoute ces caracteres dans un string, et on calcule la lettre la plus frequente de ce string.
+On calcule le decalage entre cette lettre et la lettre e. On rentre ensuite ce decalage dans la case correspondante du tableau.
+A la fin du parcourt du tableau, on a donc notre mot cle.
+On dechiffre ensuite notre texte avec.
+Il y a cependant un faille: la taille du texte. En effet, si le texte est trop court, le calcul de la frequence des lettres sera faussée. Et comme on ne vérifie pas si nos mots sont dans le dictionnaires (car les string sur lequel on calcule la frequence ne sont pas des mots cryptés du texte, etant donnée qu'on a selectionné les lettres).
+
+
+
+******************Permutation******************
+
+CLE: Pour la permutation la clef est un string, composé des 26 lettres de l'alphabet, dans un ordre quelconque. (ex: bcdefghijklmnopqrstuvwxyza)
+
+
+Comment lancer la permutation:
+
+java Chiffre p bcdefghijklmnopqrstuvwxyza fichier.txt
+java Dechiffre p bcdefghijklmnopqrstuvwxyza fichier.txt
+java Decrypt p fichier.txt
+
+******Chiffrage
+
+Pour le chiffrage et dechiffrage, tout d'abord une cle est créer. Un tableau de double dimension de taille 26, et de type string. La première ligne represente toutes les lettres de l'alphabet, puis en dessous les permutations correspondantes a chacune des letttres.
+
+La méthode choisit pour le chiffrage, est la suivante:
+A partir du texte en clair, nous recupérons chaque caractère un par un. Si ce caractere n'est pas une lettre, il est stocker tel quel, dans un nouveau string texte_chiffrer.
+	Dans le cas contraire, on parcours la clef de permutation, on regarde dans le tableau a quel lettre elle correspond, puis on stock la permutation trouvé dans texte_chiffrer.
+
+La fonction chiffre renvoie le String texte_chiffrer.
+
+******Dechiffrage
+
+Pour le dechiffrage nous procèdons de la même manière que pour le chiffrage. D'abord un tableau de double dimension representant la cle (alphabet + permutations correspondantes). Puis on parcours le texte, comme expliqué plus haut.
+
+******Decryptage
+
+Pour decrypter, nous avons uniquement le texte de départ et les frequences des lettres officiel.
+
+Tout d'abord nous lançons une fonction frequencesTexte, qui:
+
+**Créer un tableau de string, contenant en première ligne l'alphabet et en deuxième le nombre d'occurence trouvé pour chaque lettre(initialement mises a 0).
+
+**Parcours le texte, et compte le nombre d'occurence de chaque lettre.
+**Renvoie le tableau
+
+
+
+Fonction creationClef:
+
+**Prend une clef de permutation, la lettre de l'alphabet et une permutation.
+**Cherche dans la cle, la lettre de l'alphabet égal a celle donné en paramètre, et met a jour sa permutation.
+**Renvoi la cle mise à jour.
+
+
+Fonction Decrypt:
+
+**Creer une cle, avec en première ligne l'alphabet, en deuxième les permutations laisssé vides.
+
+**Lance la fonction frequenceTexte et recupère les données dans un tableau.
+
+**parcours le tableau des fréquences, trouve la plus haute, et fait appel a creationClef, pour mettre a jour la cle. Avec la frequence du texte trouvé et la plus haute fréquence officiel.
+
+**Les fréquences précèdantes sont éffacés et on recommence 25 fois.
+
+**Renvoie la cle de permutation trouvé a l'aide des fréquences.
+
+A l'aide de cette cle creer, on a plus qu'a lancé la fonction de dechiffrage avec le texte crypter et la cle.
